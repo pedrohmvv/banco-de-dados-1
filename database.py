@@ -25,7 +25,7 @@ class DB:
             print(f"Error while trying to connect to database: {e}")
             return False
 
-    def create_database(self, user) -> None:
+    def createDatabase(self, user) -> None:
         """Create the database"""
         try:
             # Connects without the especific database

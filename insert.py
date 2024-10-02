@@ -15,7 +15,7 @@ user = User()
 # Creating the database and tables
 try:
     # Connecting to the database
-    database.create_database(user)
+    database.createDatabase(user)
 
     if database.userConnect(user):
         # Create the tables
