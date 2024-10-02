@@ -22,7 +22,7 @@ class DB:
             return True
         
         except Error as e:
-            print(f"Erro ao conectar ao banco de dados: {e}")
+            print(f"Error while trying to connect to database: {e}")
             return False
 
     def create_database(self, user) -> None:
@@ -70,10 +70,10 @@ class DB:
                     cidadeFornecedor TEXT
                 )''')
                 self.connection.commit()
-                print("Tabela 'Fornecedores' criada com sucesso.")
+                print("Table 'Fornecedores' created with sucess.")
 
             except Error as e:
-                print(f"Erro ao criar a tabela 'Fornecedores': {e}")
+                print(f"Error while creating table 'Fornecedores': {e}")
             
     def createCategorias(self) -> None:
         """Create the table 'Categorias'"""
@@ -87,10 +87,10 @@ class DB:
                     FOREIGN KEY (IDFornecedor) REFERENCES Fornecedores(IDFornecedor)
                 )''')
                 self.connection.commit()
-                print("Tabela 'Categorias' criada com sucesso.")
+                print(f"Created table 'Categorias' with success.")
 
             except Error as e:
-                print(f"Erro ao criar a tabela 'Categorias': {e}")
+                print(f"Error while creating table 'Categorias': {e}")
 
     def createProdutos(self) -> None:
         """Create the table 'Produtos'"""
@@ -105,10 +105,10 @@ class DB:
                     FOREIGN KEY (IDCategoria) REFERENCES Categorias(IDCategoria)
                 )''')
                 self.connection.commit()
-                print("Tabela 'Produtos' criada com sucesso.")
+                print("Table 'Produtos' created with success.")
 
             except Error as e:
-                print(f"Erro ao criar a tabela 'Produtos': {e}")
+                print(f"Error while creating table 'Produtos': {e}")
 
     def createClientes(self) -> None:
         """Create the table 'Clientes'"""
@@ -126,10 +126,10 @@ class DB:
                     email TEXT
                 )''')
                 self.connection.commit()
-                print("Tabela 'Clientes' criada com sucesso.")
+                print("Table 'Clientes' created with success.")
 
             except Error as e:
-                print(f"Erro ao criar a tabela 'Clientes': {e}")
+                print(f"Error while creating table 'Clientes': {e}")
 
     def createPedidos(self) -> None:
         """Create the table 'Pedidos'"""
@@ -143,10 +143,10 @@ class DB:
                     FOREIGN KEY (IDCliente) REFERENCES Clientes(IDCliente)
                 )''')
                 self.connection.commit()
-                print("Tabela 'Pedidos' criada com sucesso.")
+                print("Table 'Pedidos' created with success.")
 
             except Error as e:
-                print(f"Erro ao criar a tabela 'Pedidos': {e}")
+                print(f"Error while creating table 'Pedidos': {e}")
 
     def createItemPedidos(self) -> None:
         """Create the table 'ItemPedidos'"""
@@ -160,10 +160,10 @@ class DB:
                     FOREIGN KEY (IDProduto) REFERENCES Produtos(IDProduto)  -- Corrigido: adicionei o fechamento correto aqui
                 )''')
                 self.connection.commit()
-                print("Tabela 'ItemPedidos' criada com sucesso.")
+                print("Table 'ItemPedidos' created with success.")
 
             except Error as e:
-                print(f"Erro ao criar a tabela 'ItemPedidos': {e}")
+                print(f"Error while creating table 'ItemPedidos': {e}")
 
     def createTables(self) -> None:
         """Create all tables"""
@@ -180,8 +180,8 @@ class DB:
             try:
                 self.cursor.execute(query, values)
                 self.connection.commit()
-                print("Dados inseridos com sucesso.")
+                print(f"Data inserted successfully.")
 
             except Error as e:
-                print(f"Erro ao inserir dados: {e}")
+                print(f"Error while inserting data: {e}")
 
