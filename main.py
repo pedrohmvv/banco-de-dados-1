@@ -8,5 +8,5 @@ if __name__ == '__main__':
     insertProdutos()
     insertClientes()
     insertPedidosItens()
-    print('Dados inseridos com sucesso!')
+    print("Data inserted successfully!")
 
