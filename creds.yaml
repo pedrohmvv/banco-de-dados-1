@@ -1,0 +1,4 @@
+root: 'localhost'
+host: 'localhost'
+user: 'root'
+password: 'mysqlroot'
