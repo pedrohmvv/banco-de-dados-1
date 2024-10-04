@@ -1,5 +1,3 @@
-Aqui está um exemplo de README para o seu projeto:
-
 ---
 
 # Sistema de Gestão de Vendas - Banco de Dados I
