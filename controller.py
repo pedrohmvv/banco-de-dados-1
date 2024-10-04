@@ -6,6 +6,7 @@ from faker import Faker
 from mysql.connector import Error
 
 class Controller:
+    """Database controller class"""
 
     def __init__(self, user: User):
         self.user = user
@@ -16,7 +17,12 @@ class Controller:
         self.clientes_ids = []
         self.pedidos_ids = []
 
-    def createDatabase(self, db: DB):
+    def createDatabase(self, db: DB) -> bool:
+        """Create the database passed
+
+        Args: db (DB): Database object
+        return: bool
+        """
         database = db
         try:
             database.createDatabase(self.user)
@@ -26,6 +32,11 @@ class Controller:
         return db.userConnect(self.user)
 
     def createTables(self, db: DB) -> None:
+        """Creates the database tables
+        
+        Args: db (DB): Database object
+        return: None
+        """
         try:
             if db.userConnect(self.user):
                 db.createTables()
@@ -33,15 +44,32 @@ class Controller:
             print(e)
 
     def close(self, db: DB) -> None:
+        """Close the database connection
+        
+        Args: db (DB): Database object
+        return: None
+        """
         db.close()
 
     def checkSSN(self, db: DB, ssn: str) -> bool:
+        """Check if the SSN exists in the database
+
+        Args: db (DB): Database object
+              ssn (str): Social Security Number
+        return: bool
+        """
         query = "SELECT CPF FROM Clientes WHERE CPF = %s"  
         db.cursor.execute(query, (ssn,))
 
         return db.cursor.fetchone() is not None
 
     def insertFornecedores(self, db: DB, qtd_fornecedores: int = 15) -> None:
+        """Insert Fornecedores data into the database
+        
+        Args: db (DB): Database object
+                qtd_fornecedores (int): Number of suppliers to insert
+        return: None
+        """
         for _ in range(qtd_fornecedores):
             name = self.faker.company()
             street = self.faker.street_name()
@@ -56,6 +84,12 @@ class Controller:
             self.fornecedores_ids.append(db.cursor.lastrowid)
 
     def insertCategorias(self, db: DB, qtd_categorias: int = 15) -> None:
+        """Insert Categorias data into the database
+        
+        Args: db (DB): Database object
+                qtd_categorias (int): Number of categories to insert 
+        return: None
+        """
         categorias_names = [
             'Food', 'Electronics', 'Clothing', 'Books', 'Furniture', 
             'Toys', 'Tools', 'Sporting Goods', 'Automotive', 'Health & Beauty', 
@@ -73,6 +107,12 @@ class Controller:
             self.categorias_ids.append(db.cursor.lastrowid)
 
     def insertProdutos(self, db: DB, qtd_produtos: int = 15) -> None:
+        """Insert Produtos data into the database
+
+        Args: db (DB): Database object
+                qtd_produtos (int): Number of products to insert
+        return: None
+        """
         for _ in range(qtd_produtos):
             name = self.faker.word()
             price = round(random.uniform(10.0, 1000.0), 2)
@@ -85,6 +125,12 @@ class Controller:
             self.produtos_ids.append(db.cursor.lastrowid)
 
     def insertClientes(self, db: DB, qtd_clientes: int = 70) -> None:
+        """Insert Clientes data into the database
+        
+        Args: db (DB): Database object
+                qtd_clientes (int): Number of clients to insert
+        return: None
+        """
         for _ in range(qtd_clientes):
             ssn = self.faker.unique.ssn()
             while self.checkSSN(db, ssn):
@@ -106,6 +152,12 @@ class Controller:
             self.clientes_ids.append(db.cursor.lastrowid)
 
     def insertPedidos(self, db: DB, qtd_pedidos: int = 70) -> None:
+        """Insert Pedidos data into the database
+
+        Args: db (DB): Database object
+                qtd_pedidos (int): Number of orders to insert
+        return: None
+        """
         for _ in range(qtd_pedidos):
             cliente_id = random.choice(self.clientes_ids)
             data_pedido = self.faker.date_this_year()
@@ -140,153 +192,3 @@ class Controller:
             except Error as e:
                 print(f"Error while inserting order and items: {e}")
                 db.connection.rollback()
-
-
-"""
-faker = Faker('en_US')  # Definimos a localidade dos EUA para gerar SSN corretamente
-faker.unique = True
-
-# Instancing entities
-database = DB(db='sistema_vendas')
-user = User()
-
-# Creating the database and tables
-try:
-    database.createDatabase(user)
-    if database.userConnect(user):
-        database.createTables()
-
-except Exception as e:
-    print(e)
-
-
-def genSSN():
-    return faker.unique.ssn()
-
-def checkSSN(ssn: str) -> bool:
-    query = "SELECT CPF FROM Clientes WHERE CPF = %s"  
-    database.cursor.execute(query, (ssn,))
-    return database.cursor.fetchone() is not None
-
-# Insert Fornecedores function
-def insertFornecedores(qtd_fornecedores: int = 15):
-    global fornecedores_ids
-    fornecedores_ids = []
-
-    for _ in range(qtd_fornecedores):
-        nome = faker.company()
-        rua = faker.street_name()
-        numero = faker.building_number()
-        bairro = faker.city()
-        cidade = faker.city()
-        query = '''
-                INSERT INTO Fornecedores (nomeFornecedor, ruaFornecedor, numeroFornecedor, bairroFornecedor, cidadeFornecedor)
-                VALUES (%s, %s, %s, %s, %s)
-                '''
-        database.insertData(query, (nome, rua, numero, bairro, cidade))
-        fornecedores_ids.append(database.cursor.lastrowid)
-
-# Insert Categorias function
-def insertCategorias(qtd_categorias: int = 15):
-    global categorias_ids
-    categorias_ids = []
-
-    for _ in range(qtd_categorias):
-        nome = faker.word()
-        descricao = faker.sentence()
-        query = '''
-                INSERT INTO Categorias (IDFornecedor, nomeCategoria, descricao)
-                VALUES (%s, %s, %s)
-                '''
-        database.insertData(query, (random.choice(fornecedores_ids), nome, descricao))
-        categorias_ids.append(database.cursor.lastrowid)
-
-# Insert Produtos function
-def insertProdutos(qtd_produtos: int = 15):
-    global produtos_ids
-    produtos_ids = []
-
-    for _ in range(qtd_produtos):
-        nome = faker.word()
-        preco = round(random.uniform(10.0, 1000.0), 2)
-        estoque = random.randint(10, 500)
-        query = '''
-                INSERT INTO Produtos (IDCategoria, nomeProduto, precoUnitario, estoque)
-                VALUES (%s, %s, %s, %s)
-                '''
-        database.insertData(query, (random.choice(categorias_ids), nome, preco, estoque))
-        produtos_ids.append(database.cursor.lastrowid)
-
-# Insert Clientes function
-def insertClientes(qtd_clientes: int = 70):
-    global clientes_ids
-    clientes_ids = []
-
-    for _ in range(qtd_clientes):
-        ssn = genSSN()
-        while checkSSN(ssn):
-            ssn = genSSN()
-
-        nome = faker.name()
-        rua = faker.street_name()
-        numero = faker.building_number()
-        bairro = faker.city()
-        cidade = faker.city()
-        telefone = faker.phone_number()
-        email = faker.unique.email()
-
-        query = '''
-                INSERT INTO Clientes (CPF, nomeCompleto, rua, numero, bairro, cidade, telefone, email)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                '''
-        database.insertData(query, (ssn, nome, rua, numero, bairro, cidade, telefone, email))
-        clientes_ids.append(database.cursor.lastrowid)
-
-# Insert Pedidos function
-def insertPedidos(qtd_pedidos: int = 70):
-    global pedidos_ids
-    pedidos_ids = []
-
-    for _ in range(qtd_pedidos):
-        cliente_id = random.choice(clientes_ids)
-        data_pedido = faker.date_this_year()
-        frete = round(random.uniform(10.0, 50.0), 2)
-
-        # Iniciar transação
-        try:
-            database.connection.start_transaction()
-
-            query = '''
-                    INSERT INTO Pedidos (IDCliente, data, frete)
-                    VALUES (%s, %s, %s)
-                    '''
-            database.cursor.execute(query, (cliente_id, data_pedido, frete))
-            pedido_id = database.cursor.lastrowid
-            pedidos_ids.append(pedido_id)
-
-            # Inserir itens do pedido
-            qtd_itens = random.randint(1, 5)
-            for _ in range(qtd_itens):
-                produto_id = random.choice(produtos_ids)
-                quantidade = random.randint(1, 10)
-
-                query_item = '''
-                             INSERT INTO ItemPedidos (IDPedido, IDProduto, quantidade)
-                             VALUES (%s, %s, %s)
-                             '''
-                database.cursor.execute(query_item, (pedido_id, produto_id, quantidade))
-
-            database.connection.commit()
-
-        except Error as e:
-            print(f"Error while inserting order and items: {e}")
-            database.connection.rollback()
-
-
-# Executar as inserções
-insertFornecedores()
-insertCategorias()
-insertProdutos()
-insertClientes()
-insertPedidos()
-"""

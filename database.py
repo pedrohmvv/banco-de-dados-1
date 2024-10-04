@@ -40,6 +40,7 @@ class DB:
         except Error as e:
             print(f"Error while creating database: {e}")
         
+        # Close the connection after creating the database
         finally:
             if self.cursor:
                 self.cursor.close()
@@ -47,6 +48,9 @@ class DB:
                 self.connection.close()
 
     def close(self) -> None:
+        """Close the database connection"""
+        if self.cursor:
+            self.cursor.close()
         if self.connection:
             self.connection.close()
 
@@ -177,15 +181,3 @@ class DB:
 
             except Error as e:
                 print(f"Error while inserting data: {e}")
-
-    def verificar_cpf_existente(self, cpf: str) -> bool:
-        """Check if the CPF already exists in the database"""
-        query = "SELECT CPF FROM Clientes WHERE CPF = %s"
-        self.cursor.execute(query, (cpf,))
-        return self.cursor.fetchone() is not None
-
-    def close(self) -> None:
-        if self.cursor:
-            self.cursor.close()
-        if self.connection:
-            self.connection.close()
