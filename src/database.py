@@ -12,10 +12,10 @@ class DB:
         """Connect to the database"""
         try:
             self.connection = mysql.connector.connect(
-                host=user.vars.host,
+                host=user.creds.host,
                 database=self.db,
-                user=user.vars.user,
-                password=user.vars.password
+                user=user.creds.user,
+                password=user.creds.password
             )
 
             self.cursor = self.connection.cursor()
@@ -29,9 +29,9 @@ class DB:
         """Create the database"""
         try:
             self.connection = mysql.connector.connect(
-                host=user.vars.host,
-                user=user.vars.user,
-                password=user.vars.password
+                host=user.creds.host,
+                user=user.creds.user,
+                password=user.creds.password
             )
             self.cursor = self.connection.cursor()
             self.cursor.execute(f"CREATE DATABASE IF NOT EXISTS `{self.db}`")

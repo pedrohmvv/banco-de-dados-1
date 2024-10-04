@@ -22,7 +22,7 @@ class User:
             join(dirname(abspath(__file__)), "creds.yaml"), encoding="utf-8"
         ) as file:
             data = load(file, Loader=SafeLoader)
-        self.vars = EnvVariables(
+        self.creds = EnvVariables(
             root=data.get("root"),
             host=data.get("host"),
             user=data.get("user"),

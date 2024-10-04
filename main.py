@@ -1,7 +1,7 @@
 """Main module of the application."""
-from controller import Controller
-from user import User
-from database import DB
+from src.controller import Controller
+from src.user import User
+from src.database import DB
 
 database = DB()
 user = User()
