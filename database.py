@@ -25,32 +25,25 @@ class DB:
             print(f"Error while trying to connect to database: {e}")
             return False
 
-    def create_database(self, user) -> None:
+    def createDatabase(self, user) -> None:
         """Create the database"""
         try:
-            # Connects without the especific database
             self.connection = mysql.connector.connect(
                 host=user.vars.host,
                 user=user.vars.user,
                 password=user.vars.password
             )
             self.cursor = self.connection.cursor()
-            
-            # Create the database if not exists
             self.cursor.execute(f"CREATE DATABASE IF NOT EXISTS `{self.db}`")
             self.connection.commit()
-            print(f"Database: '{self.db}' already exists.")
 
         except Error as e:
-            raise e
+            print(f"Error while creating database: {e}")
         
         finally:
             if self.cursor:
-                # Close the cursor
                 self.cursor.close()
-
             if self.connection:
-                # Close the connection
                 self.connection.close()
 
     def close(self) -> None:
@@ -70,11 +63,11 @@ class DB:
                     cidadeFornecedor TEXT
                 )''')
                 self.connection.commit()
-                print("Table 'Fornecedores' created with sucess.")
+                print("Table 'Fornecedores' created with success.")
 
             except Error as e:
                 print(f"Error while creating table 'Fornecedores': {e}")
-            
+
     def createCategorias(self) -> None:
         """Create the table 'Categorias'"""
         if self.connection:
@@ -87,7 +80,7 @@ class DB:
                     FOREIGN KEY (IDFornecedor) REFERENCES Fornecedores(IDFornecedor)
                 )''')
                 self.connection.commit()
-                print(f"Created table 'Categorias' with success.")
+                print("Created table 'Categorias' with success.")
 
             except Error as e:
                 print(f"Error while creating table 'Categorias': {e}")
@@ -100,8 +93,8 @@ class DB:
                     IDProduto INTEGER PRIMARY KEY AUTO_INCREMENT,
                     IDCategoria INTEGER,
                     nomeProduto TEXT,
-                    precoUnitario REAL,
-                    estoque INTEGER,
+                    precoUnitario REAL CHECK (precoUnitario > 0),
+                    estoque INTEGER CHECK (estoque >= 0),
                     FOREIGN KEY (IDCategoria) REFERENCES Categorias(IDCategoria)
                 )''')
                 self.connection.commit()
@@ -116,14 +109,14 @@ class DB:
             try:
                 self.cursor.execute('''CREATE TABLE IF NOT EXISTS Clientes (
                     IDCliente INTEGER PRIMARY KEY AUTO_INCREMENT,
-                    CPF TEXT,
+                    CPF VARCHAR(11) UNIQUE,
                     nomeCompleto TEXT,
                     rua TEXT,
                     numero TEXT,
                     bairro TEXT,
                     cidade TEXT,
                     telefone TEXT,
-                    email TEXT
+                    email VARCHAR(255) UNIQUE
                 )''')
                 self.connection.commit()
                 print("Table 'Clientes' created with success.")
@@ -155,9 +148,9 @@ class DB:
                 self.cursor.execute('''CREATE TABLE IF NOT EXISTS ItemPedidos (
                     IDPedido INTEGER,
                     IDProduto INTEGER,
-                    quantidade INTEGER,
+                    quantidade INTEGER CHECK (quantidade > 0),
                     FOREIGN KEY (IDPedido) REFERENCES Pedidos(IDPedido),
-                    FOREIGN KEY (IDProduto) REFERENCES Produtos(IDProduto)  -- Corrigido: adicionei o fechamento correto aqui
+                    FOREIGN KEY (IDProduto) REFERENCES Produtos(IDProduto)
                 )''')
                 self.connection.commit()
                 print("Table 'ItemPedidos' created with success.")
@@ -173,7 +166,7 @@ class DB:
         self.createClientes()
         self.createPedidos()
         self.createItemPedidos()
-    
+
     def insertData(self, query: str, values: tuple) -> None:
         """Insert generic data into the database"""
         if self.connection:
@@ -185,3 +178,14 @@ class DB:
             except Error as e:
                 print(f"Error while inserting data: {e}")
 
+    def verificar_cpf_existente(self, cpf: str) -> bool:
+        """Check if the CPF already exists in the database"""
+        query = "SELECT CPF FROM Clientes WHERE CPF = %s"
+        self.cursor.execute(query, (cpf,))
+        return self.cursor.fetchone() is not None
+
+    def close(self) -> None:
+        if self.cursor:
+            self.cursor.close()
+        if self.connection:
+            self.connection.close()
