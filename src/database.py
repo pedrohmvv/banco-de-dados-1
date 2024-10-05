@@ -43,9 +43,7 @@ class DB:
         # Close the connection after creating the database
         finally:
             if self.cursor:
-                self.cursor.close()
-            if self.connection:
-                self.connection.close()
+                self.close()
 
     def close(self) -> None:
         """Close the database connection"""
@@ -53,6 +51,7 @@ class DB:
             self.cursor.close()
         if self.connection:
             self.connection.close()
+        print("Database connection closed.")
 
     def createFornecedores(self) -> None:
         """Create the table 'Fornecedores'"""
