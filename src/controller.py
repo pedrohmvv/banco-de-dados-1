@@ -95,10 +95,11 @@ class Controller:
                 qtd_categorias (int): Number of categories to insert 
         return: None
         """
-        categories = list(self.items.item.products_by_category.keys())
+        categories = list(self.items.products_for_categories.keys())
+        description = self.items.category_descriptions
 
         for categoria in categories:
-            description = self.faker.sentence()
+            description = self.items.category_descriptions[categoria]
             query = '''
                     INSERT INTO Categorias (IDFornecedor, nomeCategoria, descricao)
                     VALUES (%s, %s, %s)
@@ -110,30 +111,32 @@ class Controller:
         """Insert Produtos data into the database
 
         Args: db (DB): Database object
-                qtd_produtos (int): Number of products to insert
+            qtd_produtos (int): Number of products to insert
         return: None
         """
-        # Lista de produtos correspondentes às suas categorias
-        products_by_category = self.items.item.products_by_category
-        categories = list(products_by_category.keys())
+        # Lista de produtos correspondentes às suas categorias com preços
+        products_with_prices = self.items.products_for_categories
+        categories = list(products_with_prices.keys())
 
         # Criando um dicionário para mapear nome da categoria com o ID
         categoria_nome_to_id = {nome: id_ for nome, id_ in zip(
-            list(categories),
+            categories,
             self.categorias_ids
         )}
 
-        for categoria, produtos in products_by_category.items():
+        for categoria, produtos in products_with_prices.items():
             categoria_id = categoria_nome_to_id[categoria]
-            for produto in produtos:
-                price = round(random.uniform(10.0, 1000.0), 2)
+            print(f"Produtos da categoria {categoria}:")
+            for produto, preco in produtos:
+                print(f"Produto: {produto}, Preço: {preco}")
                 stock = random.randint(10, 500)
                 query = '''
                         INSERT INTO Produtos (IDCategoria, nomeProduto, precoUnitario, estoque)
                         VALUES (%s, %s, %s, %s)
                         '''
-                db.insertData(query, (categoria_id, produto, price, stock))
+                db.insertData(query, (categoria_id, produto, preco, stock))
                 self.produtos_ids.append(db.cursor.lastrowid)
+
 
     def insertClientes(self, db: DB, qtd_clientes: int = 70) -> None:
         """Insert Clientes data into the database

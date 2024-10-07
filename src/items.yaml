@@ -1,19 +1,19 @@
-products_by_category: {
-            'Food': ['Bread', 'Rice', 'Pasta', 'Milk', 'Cheese'],
-            'Electronics': ['Smartphone', 'Laptop', 'TV', 'Headphones', 'Camera'],
-            'Clothing': ['T-shirt', 'Jeans', 'Jacket', 'Dress', 'Shoes'],
-            'Books': ['Fiction Novel', 'Science Book', 'Biography', 'Cookbook', 'Dictionary'],
-            'Furniture': ['Chair', 'Table', 'Sofa', 'Bed', 'Wardrobe'],
-            'Toys': ['Action Figure', 'Doll', 'Board Game', 'Puzzle', 'LEGO'],
-            'Tools': ['Hammer', 'Screwdriver', 'Drill', 'Wrench', 'Saw'],
-            'Sporting Goods': ['Football', 'Tennis Racket', 'Basketball', 'Bicycle', 'Helmet'],
-            'Automotive': ['Car Battery', 'Tire', 'Motor Oil', 'Brake Pad', 'Car Wax'],
-            'Health & Beauty': ['Shampoo', 'Soap', 'Toothpaste', 'Lotion', 'Perfume'],
-            'Home & Garden': ['Vacuum Cleaner', 'Lawn Mower', 'Garden Hose', 'Light Bulb', 'Fertilizer'],
-            'Jewelry': ['Necklace', 'Bracelet', 'Earrings', 'Ring', 'Watch'],
-            'Music': ['Guitar', 'Drum Set', 'Piano', 'Violin', 'Flute'],
-            'Movies': ['Action Movie', 'Romantic Movie', 'Comedy Movie', 'Horror Movie', 'Documentary'],
-            'Pet Supplies': ['Dog Food', 'Cat Litter', 'Bird Cage', 'Fish Tank', 'Pet Shampoo'],
-            'Software': ['Antivirus', 'Operating System', 'Office Suite', 'Video Editor', 'Photo Editor'],
-            'Video Games': ['RPG Game', 'Shooter Game', 'Adventure Game', 'Sports Game', 'Racing Game']
-        }
+products_with_prices = {
+    "Food": [("Bread", 1.50), ("Rice", 2.00), ("Pasta", 1.75), ("Milk", 1.25), ("Cheese", 3.50)],
+    "Electronics": [("Smartphone", 600), ("Laptop", 1200), ("TV", 400), ("Headphones", 80), ("Camera", 500)],
+    "Clothing": [("T-shirt", 15), ("Jeans", 40), ("Jacket", 80), ("Dress", 60), ("Shoes", 50)],
+    "Books": [("Fiction Novel", 12), ("Science Book", 25), ("Biography", 20), ("Cookbook", 30), ("Dictionary", 35)],
+    "Furniture": [("Chair", 75), ("Table", 150), ("Sofa", 500), ("Bed", 800), ("Wardrobe", 400)],
+    "Toys": [("Action Figure", 20), ("Doll", 25), ("Board Game", 30), ("Puzzle", 15), ("LEGO", 50)],
+    "Tools": [("Hammer", 20), ("Screwdriver", 10), ("Drill", 70), ("Wrench", 15), ("Saw", 25)],
+    "Sporting Goods": [("Football", 30), ("Tennis Racket", 100), ("Basketball", 40), ("Bicycle", 300), ("Helmet", 50)],
+    "Automotive": [("Car Battery", 150), ("Tire", 100), ("Motor Oil", 30), ("Brake Pad", 60), ("Car Wax", 20)],
+    "Health & Beauty": [("Shampoo", 10), ("Soap", 3), ("Toothpaste", 4), ("Lotion", 15), ("Perfume", 50)],
+    "Home & Garden": [("Vacuum Cleaner", 200), ("Lawn Mower", 300), ("Garden Hose", 20), ("Light Bulb", 5), ("Fertilizer", 25)],
+    "Jewelry": [("Necklace", 150), ("Bracelet", 100), ("Earrings", 75), ("Ring", 200), ("Watch", 250)],
+    "Music": [("Guitar", 500), ("Drum Set", 1000), ("Piano", 3000), ("Violin", 800), ("Flute", 400)],
+    "Movies": [("Action Movie", 15), ("Romantic Movie", 12), ("Comedy Movie", 10), ("Horror Movie", 14), ("Documentary", 20)],
+    "Pet Supplies": [("Dog Food", 30), ("Cat Litter", 15), ("Bird Cage", 50), ("Fish Tank", 100), ("Pet Shampoo", 10)],
+    "Software": [("Antivirus", 50), ("Operating System", 100), ("Office Suite", 150), ("Video Editor", 200), ("Photo Editor", 100)],
+    "Video Games": [("RPG Game", 60), ("Shooter Game", 60), ("Adventure Game", 50), ("Sports Game", 55), ("Racing Game", 50)]
+}
