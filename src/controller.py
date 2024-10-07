@@ -88,7 +88,7 @@ class Controller:
             db.insertData(query, (name,street,number,neighborhood,city))
             self.fornecedores_ids.append(db.cursor.lastrowid)
 
-    def insertCategorias(self, db: DB, qtd_categorias: int = 15) -> None:
+    def insertCategorias(self, db: DB) -> None:
         """Insert Categorias data into the database
         
         Args: db (DB): Database object
@@ -98,16 +98,16 @@ class Controller:
         categories = list(self.items.products_for_categories.keys())
         description = self.items.category_descriptions
 
-        for categoria in categories:
-            description = self.items.category_descriptions[categoria]
+        for category in categories:
+            description = self.items.category_descriptions[category]
             query = '''
                     INSERT INTO Categorias (IDFornecedor, nomeCategoria, descricao)
                     VALUES (%s, %s, %s)
                     '''
-            db.insertData(query, (random.choice(self.fornecedores_ids), categoria, description))
+            db.insertData(query, (random.choice(self.fornecedores_ids), category, description))
             self.categorias_ids.append(db.cursor.lastrowid)
 
-    def insertProdutos(self, db: DB, qtd_produtos: int = 15) -> None:
+    def insertProdutos(self, db: DB) -> None:
         """Insert Produtos data into the database
 
         Args: db (DB): Database object
@@ -124,17 +124,15 @@ class Controller:
             self.categorias_ids
         )}
 
-        for categoria, produtos in products_with_prices.items():
-            categoria_id = categoria_nome_to_id[categoria]
-            print(f"Produtos da categoria {categoria}:")
-            for produto, preco in produtos:
-                print(f"Produto: {produto}, Preço: {preco}")
+        for category, products in products_with_prices.items():
+            categoria_id = categoria_nome_to_id[category]
+            for product_name, product_price in products:
                 stock = random.randint(10, 500)
                 query = '''
                         INSERT INTO Produtos (IDCategoria, nomeProduto, precoUnitario, estoque)
                         VALUES (%s, %s, %s, %s)
                         '''
-                db.insertData(query, (categoria_id, produto, preco, stock))
+                db.insertData(query, (categoria_id, product_name, product_price, stock))
                 self.produtos_ids.append(db.cursor.lastrowid)
 
 
@@ -174,8 +172,8 @@ class Controller:
         """
         for _ in range(qtd_pedidos):
             cliente_id = random.choice(self.clientes_ids)
-            data_pedido = self.faker.date_this_year()
-            frete = round(random.uniform(10.0, 50.0), 2)
+            order_date = self.faker.date_this_year()
+            transport_tax = round(random.uniform(10.0, 50.0), 2)
 
             # Initiate transaction
             try:
@@ -185,21 +183,21 @@ class Controller:
                         INSERT INTO Pedidos (IDCliente, data, frete)
                         VALUES (%s, %s, %s)
                         '''
-                db.cursor.execute(query, (cliente_id, data_pedido, frete))
-                pedido_id = db.cursor.lastrowid
-                self.pedidos_ids.append(pedido_id)
+                db.cursor.execute(query, (cliente_id, order_date, transport_tax))
+                order_id = db.cursor.lastrowid
+                self.pedidos_ids.append(order_id)
 
                 # Insert order items
-                qtd_itens = random.randint(1, 5)
-                for _ in range(qtd_itens):
-                    produto_id = random.choice(self.produtos_ids)
-                    quantidade = random.randint(1, 10)
+                itens_quantity = random.randint(1, 5)
+                for _ in range(itens_quantity):
+                    product_id = random.choice(self.produtos_ids)
+                    quantity = random.randint(1, 10)
 
                     query_item = '''
                                 INSERT INTO ItemPedidos (IDPedido, IDProduto, quantidade)
                                 VALUES (%s, %s, %s)
                                 '''
-                    db.cursor.execute(query_item, (pedido_id, produto_id, quantidade))
+                    db.cursor.execute(query_item, (order_id, product_id, quantity))
 
                 db.connection.commit()
 
