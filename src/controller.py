@@ -1,6 +1,8 @@
 """Import modules"""
-from database import DB
-from user import User
+from src.database import DB
+from src.user import User
+from src.items import Items
+
 import random
 from faker import Faker
 from mysql.connector import Error
@@ -10,6 +12,9 @@ class Controller:
 
     def __init__(self, user: User):
         self.user = user
+
+        self.items = Items()
+
         self.faker = Faker('en_US')
         self.fornecedores_ids = []
         self.categorias_ids = []
@@ -90,20 +95,15 @@ class Controller:
                 qtd_categorias (int): Number of categories to insert 
         return: None
         """
-        categorias_names = [
-            'Food', 'Electronics', 'Clothing', 'Books', 'Furniture', 
-            'Toys', 'Tools', 'Sporting Goods', 'Automotive', 'Health & Beauty', 
-            'Home & Garden', 'Jewelry', 'Music', 'Movies', 'Pet Supplies', 'Software', 
-            'Video Games'
-            ]
-        for _ in range(qtd_categorias):
-            name = categorias_names.pop(random.randint(0, len(categorias_names)-1))
+        categories = list(self.items.item.products_by_category.keys())
+
+        for categoria in categories:
             description = self.faker.sentence()
             query = '''
                     INSERT INTO Categorias (IDFornecedor, nomeCategoria, descricao)
                     VALUES (%s, %s, %s)
                     '''
-            db.insertData(query, (random.choice(self.fornecedores_ids), name, description))
+            db.insertData(query, (random.choice(self.fornecedores_ids), categoria, description))
             self.categorias_ids.append(db.cursor.lastrowid)
 
     def insertProdutos(self, db: DB, qtd_produtos: int = 15) -> None:
@@ -113,16 +113,27 @@ class Controller:
                 qtd_produtos (int): Number of products to insert
         return: None
         """
-        for _ in range(qtd_produtos):
-            name = self.faker.word()
-            price = round(random.uniform(10.0, 1000.0), 2)
-            stock = random.randint(10, 500)
-            query = '''
-                    INSERT INTO Produtos (IDCategoria, nomeProduto, precoUnitario, estoque)
-                    VALUES (%s, %s, %s, %s)
-                    '''
-            db.insertData(query, (random.choice(self.categorias_ids), name, price, stock))
-            self.produtos_ids.append(db.cursor.lastrowid)
+        # Lista de produtos correspondentes às suas categorias
+        products_by_category = self.items.item.products_by_category
+        categories = list(products_by_category.keys())
+
+        # Criando um dicionário para mapear nome da categoria com o ID
+        categoria_nome_to_id = {nome: id_ for nome, id_ in zip(
+            list(categories),
+            self.categorias_ids
+        )}
+
+        for categoria, produtos in products_by_category.items():
+            categoria_id = categoria_nome_to_id[categoria]
+            for produto in produtos:
+                price = round(random.uniform(10.0, 1000.0), 2)
+                stock = random.randint(10, 500)
+                query = '''
+                        INSERT INTO Produtos (IDCategoria, nomeProduto, precoUnitario, estoque)
+                        VALUES (%s, %s, %s, %s)
+                        '''
+                db.insertData(query, (categoria_id, produto, price, stock))
+                self.produtos_ids.append(db.cursor.lastrowid)
 
     def insertClientes(self, db: DB, qtd_clientes: int = 70) -> None:
         """Insert Clientes data into the database

@@ -1,0 +1,19 @@
+products_by_category: {
+            'Food': ['Bread', 'Rice', 'Pasta', 'Milk', 'Cheese'],
+            'Electronics': ['Smartphone', 'Laptop', 'TV', 'Headphones', 'Camera'],
+            'Clothing': ['T-shirt', 'Jeans', 'Jacket', 'Dress', 'Shoes'],
+            'Books': ['Fiction Novel', 'Science Book', 'Biography', 'Cookbook', 'Dictionary'],
+            'Furniture': ['Chair', 'Table', 'Sofa', 'Bed', 'Wardrobe'],
+            'Toys': ['Action Figure', 'Doll', 'Board Game', 'Puzzle', 'LEGO'],
+            'Tools': ['Hammer', 'Screwdriver', 'Drill', 'Wrench', 'Saw'],
+            'Sporting Goods': ['Football', 'Tennis Racket', 'Basketball', 'Bicycle', 'Helmet'],
+            'Automotive': ['Car Battery', 'Tire', 'Motor Oil', 'Brake Pad', 'Car Wax'],
+            'Health & Beauty': ['Shampoo', 'Soap', 'Toothpaste', 'Lotion', 'Perfume'],
+            'Home & Garden': ['Vacuum Cleaner', 'Lawn Mower', 'Garden Hose', 'Light Bulb', 'Fertilizer'],
+            'Jewelry': ['Necklace', 'Bracelet', 'Earrings', 'Ring', 'Watch'],
+            'Music': ['Guitar', 'Drum Set', 'Piano', 'Violin', 'Flute'],
+            'Movies': ['Action Movie', 'Romantic Movie', 'Comedy Movie', 'Horror Movie', 'Documentary'],
+            'Pet Supplies': ['Dog Food', 'Cat Litter', 'Bird Cage', 'Fish Tank', 'Pet Shampoo'],
+            'Software': ['Antivirus', 'Operating System', 'Office Suite', 'Video Editor', 'Photo Editor'],
+            'Video Games': ['RPG Game', 'Shooter Game', 'Adventure Game', 'Sports Game', 'Racing Game']
+        }
