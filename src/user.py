@@ -1,30 +1,26 @@
 """Import modules"""
 import dataclasses
-from yaml import load
-from yaml.loader import SafeLoader
-from os.path import join, dirname, abspath
+from os import environ
+from dotenv import load_dotenv
 
 @dataclasses.dataclass
 class EnvVariables:
     """Variables dataclass"""
-    root: str
-    host: str
-    user: str
-    password: str
+    ROOT: str
+    HOST: str
+    USER: str
+    PASSWORD: str
 
 class User:
     """User Configuration interface"""
     
     def __init__(self): 
         """Load instance variables"""
-        data = {}
-        with open(
-            join(dirname(abspath(__file__)), "creds.yaml"), encoding="utf-8"
-        ) as file:
-            data = load(file, Loader=SafeLoader)
+        load_dotenv()
+
         self.creds = EnvVariables(
-            root=data.get("root"),
-            host=data.get("host"),
-            user=data.get("user"),
-            password=data.get("password")
+            ROOT=environ["DB_ROOT"],
+            HOST=environ["DB_HOST"],
+            USER=environ["DB_USER"],
+            PASSWORD=environ["DB_PASSWORD"]
         )
