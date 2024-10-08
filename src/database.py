@@ -1,12 +1,19 @@
+"""import modules"""
 import mysql.connector
 from mysql.connector import Error
 
 class DB:
     """Database class"""
     def __init__(self, db: str = 'sistema_vendas') -> None:
+        from src.tables import Tables
+        
+        self.tables = Tables()
         self.db = db
         self.connection = None
         self.cursor = None
+
+        self.create_query = 'CREATE TABLE IF NOT EXISTS'
+
 
     def userConnect(self, user) -> bool:
         """Connect to the database"""
@@ -53,113 +60,82 @@ class DB:
             self.connection.close()
         print("Database connection closed.")
 
+    def createQuery(self, table: str) -> str:
+        """Create the query to create a table"""
+        query = ' '.join([self.create_query, table])
+        return query
+
     def createFornecedores(self) -> None:
         """Create the table 'Fornecedores'"""
         if self.connection:
             try:
-                self.cursor.execute('''CREATE TABLE IF NOT EXISTS Fornecedores (
-                    IDFornecedor INTEGER PRIMARY KEY AUTO_INCREMENT,
-                    nomeFornecedor TEXT,
-                    ruaFornecedor TEXT,
-                    numeroFornecedor INTEGER,
-                    bairroFornecedor TEXT,
-                    cidadeFornecedor TEXT
-                )''')
+                fornecedores = self.createQuery(self.tables.fornecedores())
+                self.cursor.execute(fornecedores)
                 self.connection.commit()
-                print("Table 'Fornecedores' created with success.")
+                print(f"Table '{self.tables.names.fornecedores}' created with success.")
 
             except Error as e:
-                print(f"Error while creating table 'Fornecedores': {e}")
+                print(f"Error while creating table '{self.tables.names.fornecedores}': {e}")
 
     def createCategorias(self) -> None:
         """Create the table 'Categorias'"""
         if self.connection:
             try:
-                self.cursor.execute('''CREATE TABLE IF NOT EXISTS Categorias (
-                    IDCategoria INTEGER PRIMARY KEY AUTO_INCREMENT,
-                    IDFornecedor INTEGER,
-                    nomeCategoria TEXT,
-                    descricao TEXT,
-                    FOREIGN KEY (IDFornecedor) REFERENCES Fornecedores(IDFornecedor)
-                )''')
+                categorias = self.createQuery(self.tables.categorias())
+                self.cursor.execute(categorias)
                 self.connection.commit()
-                print("Created table 'Categorias' with success.")
+                print(f"Table '{self.tables.names.categorias}' created with success.")
 
             except Error as e:
-                print(f"Error while creating table 'Categorias': {e}")
+                print(f"Error while creating table '{self.tables.names.categorias}': {e}")
 
     def createProdutos(self) -> None:
         """Create the table 'Produtos'"""
         if self.connection:
             try:
-                self.cursor.execute('''CREATE TABLE IF NOT EXISTS Produtos (
-                    IDProduto INTEGER PRIMARY KEY AUTO_INCREMENT,
-                    IDCategoria INTEGER,
-                    nomeProduto TEXT,
-                    precoUnitario REAL CHECK (precoUnitario > 0),
-                    estoque INTEGER CHECK (estoque >= 0),
-                    FOREIGN KEY (IDCategoria) REFERENCES Categorias(IDCategoria)
-                )''')
+                produtos = self.createQuery(self.tables.produtos())
+                self.cursor.execute(produtos)
                 self.connection.commit()
-                print("Table 'Produtos' created with success.")
+                print(f"Table '{self.tables.names.produtos}' created with success.")
 
             except Error as e:
-                print(f"Error while creating table 'Produtos': {e}")
+                print(f"Error while creating table '{self.tables.names.produtos}': {e}")
 
     def createClientes(self) -> None:
         """Create the table 'Clientes'"""
         if self.connection:
             try:
-                self.cursor.execute('''CREATE TABLE IF NOT EXISTS Clientes (
-                    IDCliente INTEGER PRIMARY KEY AUTO_INCREMENT,
-                    CPF VARCHAR(11) UNIQUE,
-                    nomeCompleto TEXT,
-                    rua TEXT,
-                    numero TEXT,
-                    bairro TEXT,
-                    cidade TEXT,
-                    telefone TEXT,
-                    email VARCHAR(255) UNIQUE
-                )''')
+                clientes = self.createQuery(self.tables.clientes())
+                self.cursor.execute(clientes)
                 self.connection.commit()
-                print("Table 'Clientes' created with success.")
+                print(f"Table '{self.tables.names.clientes}' created with success.")
 
             except Error as e:
-                print(f"Error while creating table 'Clientes': {e}")
+                print(f"Error while creating table '{self.tables.names.clientes}': {e}")
 
     def createPedidos(self) -> None:
         """Create the table 'Pedidos'"""
         if self.connection:
             try:
-                self.cursor.execute('''CREATE TABLE IF NOT EXISTS Pedidos (
-                    IDPedido INTEGER PRIMARY KEY AUTO_INCREMENT,
-                    IDCliente INTEGER,
-                    data TEXT,
-                    frete REAL,
-                    FOREIGN KEY (IDCliente) REFERENCES Clientes(IDCliente)
-                )''')
+                pedidos = self.createQuery(self.tables.pedidos())
+                self.cursor.execute(pedidos)
                 self.connection.commit()
-                print("Table 'Pedidos' created with success.")
+                print(f"Table '{self.tables.names.pedidos}' created with success.")
 
             except Error as e:
-                print(f"Error while creating table 'Pedidos': {e}")
+                print(f"Error while creating table '{self.tables.names.pedidos}': {e}")
 
     def createItemPedidos(self) -> None:
         """Create the table 'ItemPedidos'"""
         if self.connection:
             try:
-                self.cursor.execute('''CREATE TABLE IF NOT EXISTS ItemPedidos (
-                    IDPedido INTEGER,
-                    IDProduto INTEGER,
-                    quantidade INTEGER CHECK (quantidade > 0),
-                    FOREIGN KEY (IDPedido) REFERENCES Pedidos(IDPedido),
-                    FOREIGN KEY (IDProduto) REFERENCES Produtos(IDProduto)
-                )''')
+                itemPedidos = self.createQuery(self.tables.itensPedido())
+                self.cursor.execute(itemPedidos)
                 self.connection.commit()
-                print("Table 'ItemPedidos' created with success.")
+                print(f"Table '{self.tables.names.itensPedido}' created with success.")
 
             except Error as e:
-                print(f"Error while creating table 'ItemPedidos': {e}")
+                print(f"Error while creating table '{self.tables.names.itensPedido}': {e}")
 
     def createTables(self) -> None:
         """Create all tables"""
