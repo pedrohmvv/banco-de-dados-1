@@ -15,7 +15,6 @@ class DB:
         self.db = db
         self.connection = None
         self.cursor = None
-        self.create_query = 'CREATE TABLE IF NOT EXISTS'
 
     def userConnect(self, user: User) -> bool:
         """Connect to the database
@@ -77,7 +76,8 @@ class DB:
         Args: table (str): Table name
         return: str
         """
-        query = ' '.join([self.create_query, table])
+        create_query = 'CREATE TABLE IF NOT EXISTS'
+        query = ' '.join([create_query, table])
         return query
 
     def createFornecedores(self) -> None:
