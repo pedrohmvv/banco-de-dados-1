@@ -20,6 +20,7 @@ class Tables:
         names_data = {}
         with open(join(dirname(abspath(__file__)), 'tables_names.yaml'), encoding='utf-8') as file:
             names_data = load(file, Loader=SafeLoader)
+
         self.names = TablesNames(
             fornecedores=names_data.get('fornecedores'),
             categorias=names_data.get('categorias'),

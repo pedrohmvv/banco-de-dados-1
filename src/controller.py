@@ -1,8 +1,9 @@
-import logging
+"""Import modules"""
 from src.database import DB
 from src.user import User
-from src.items import Items
+from src.config.items import Items
 
+import logging
 import random
 from faker import Faker
 from mysql.connector import Error
@@ -79,7 +80,7 @@ class Controller:
         categories_columns = db.getColumns(table=table_name, insert=True)
 
         for category in categories:
-            description = self.items.category_descriptions[category]
+            description = self.items.category_descriptions.get(category)
 
             db.insertData(
                 table=table_name,
