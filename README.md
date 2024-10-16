@@ -39,7 +39,7 @@ O banco de dados é composto pelas seguintes tabelas:
 
 ### Diagrama ER Simplificado
 
-![Diagrama ER](link-diagrama)
+<img src="img/diagrama-ER.png"></img>
 
 ## Instalação
 

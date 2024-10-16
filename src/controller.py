@@ -50,13 +50,15 @@ class Controller:
     def checkSSN(self, db: DB, ssn: str) -> bool:
         """Check if the SSN exists in the database"""
         logging.info(f"Checking if SSN {ssn} exists in database...")
+
         query = "SELECT CPF FROM Clientes WHERE CPF = %s"
         db.cursor.execute(query, (ssn,))
         return db.cursor.fetchone() is not None
 
-    def insertFornecedores(self, db: DB, qtd_fornecedores: int = 15) -> None:
+    def insertFornecedores(self, db: DB, qtd_fornecedores: int = 17) -> None:
         """Insert Fornecedores data into the database"""
         logging.info(f"Inserting {qtd_fornecedores} suppliers...")
+
         table_name = db.tables.names.fornecedores
         fornecedores_columns = db.getColumns(table=table_name, insert=True)
 
@@ -70,29 +72,33 @@ class Controller:
                 values=(name, street, number, neighborhood, city)
             )
             self.fornecedores_ids.append(db.cursor.lastrowid)
+
         logging.info(f"Suppliers inserted successfully.")
 
     def insertCategorias(self, db: DB) -> None:
         """Insert Categorias data into the database"""
         logging.info("Inserting categories...")
+
         categories = list(self.items.products_for_categories.keys())
         table_name = db.tables.names.categorias
         categories_columns = db.getColumns(table=table_name, insert=True)
 
-        for category in categories:
+        for i, category in enumerate(categories):
             description = self.items.category_descriptions.get(category)
 
             db.insertData(
                 table=table_name,
                 columns=categories_columns,
-                values=(random.choice(self.fornecedores_ids), category, description)
+                values=(self.fornecedores_ids[i], category, description)
             )
             self.categorias_ids.append(db.cursor.lastrowid)
+
         logging.info("Categories inserted successfully.")
 
     def insertProdutos(self, db: DB) -> None:
         """Insert Produtos data into the database"""
         logging.info("Inserting products...")
+
         table_name = db.tables.names.produtos
         products_with_prices = self.items.products_for_categories
         categories = list(products_with_prices.keys())
@@ -111,11 +117,13 @@ class Controller:
                     values=(categoria_id, product_name, product_price, stock)
                 )
                 self.produtos_ids.append(db.cursor.lastrowid)
+
         logging.info("Products inserted successfully.")
 
     def insertClientes(self, db: DB, qtd_clientes: int = 70) -> None:
         """Insert Clientes data into the database"""
         logging.info(f"Inserting {qtd_clientes} clients...")
+
         table_name = db.tables.names.clientes
         clientes_columns = db.getColumns(table=table_name, insert=True)
 
@@ -135,11 +143,13 @@ class Controller:
                 values=(ssn, name, street, number, neighborhood, city, phone, email)
             )
             self.clientes_ids.append(db.cursor.lastrowid)
+
         logging.info(f"{qtd_clientes} clients inserted successfully.")
 
     def insertPedidos(self, db: DB, qtd_pedidos: int = 70) -> None:
         """Insert Pedidos data into the database"""
         logging.info(f"Inserting {qtd_pedidos} orders...")
+
         for _ in range(qtd_pedidos):
             table_name = db.tables.names.pedidos
             pedidos_columns = db.getColumns(table=table_name, insert=True)
@@ -171,7 +181,6 @@ class Controller:
                         values=(order_id, product_id, quantity)
                     )
 
-                db.connection.commit()
                 logging.info(f"Order {order_id} inserted successfully.")
 
             except Error as e:
