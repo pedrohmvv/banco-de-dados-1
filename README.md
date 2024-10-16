@@ -53,8 +53,8 @@ O banco de dados é composto pelas seguintes tabelas:
 1. Clone o repositório:
 
 ```bash
-git clone https://github.com/seu-usuario/sistema-vendas.git
-cd sistema-vendas
+git clone git@github.com:pedrohmvv/banco-de-dados-1.git
+cd banco-de-dados-1
 ```
 
 2. Instale as dependências necessárias:
@@ -63,7 +63,7 @@ cd sistema-vendas
 pip install -r requirements.txt
 ```
 
-3. Configure as credenciais de acesso ao MySQL no arquivo `user.py`.
+3. Configure as credenciais de acesso ao MySQL no arquivo `.env`.
 
 4. Execute o script para criar o banco de dados e as tabelas:
 
