@@ -74,7 +74,7 @@ class Controller:
 
         logging.info("Positions inserted successfully.")
 
-    def insertFuncionarios(self, db: DB, qtd_vendedores: int = 10) -> None:
+    def insertFuncionarios(self, db: DB, qtd_vendedores: int = 50)-> None:
         """Insert Vendedores data into the database"""
         logging.info(f"Inserting {qtd_vendedores} sellers...")
 
@@ -212,6 +212,7 @@ class Controller:
 
             client_id = random.choice(self.clientes_ids)
             freight = round(random.uniform(10, 100), ndigits=2)
+            order_time = f'{random.randint(8, 18)}:{random.randint(0, 59)}:{random.randint(0, 59)}' 
 
             if isinstance(hire_date, str):
                 hire_date = datetime.strptime(hire_date, '%Y-%m-%d').date()
@@ -226,7 +227,7 @@ class Controller:
                     db.insertData(
                         table=table_name,
                         columns=pedidos_columns,
-                        values=(client_id, id_vendedor, order_date, freight)
+                        values=(client_id, id_vendedor, order_date, order_time, freight)
                     )
                     order_id = db.cursor.lastrowid
                     self.pedidos_ids.append(order_id)

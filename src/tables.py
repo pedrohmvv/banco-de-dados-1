@@ -49,22 +49,22 @@ class Tables:
         table = self.createTable(self.names.cargos, columns_types)
 
         return table
-    
+
     def funcionarios(self) -> str:
-        """Create the table 'Vendedores'"""
+        """Create the table 'Funcionarios'"""
         columns_types = '''(
         IDFuncionario INTEGER PRIMARY KEY AUTO_INCREMENT,
         IDCargo INTEGER,
         nomeVendedor TEXT,
-        dataNascimentoVendedores TEXT,
-        dataContratacao TEXT,
-        dataDesligamento TEXT,
+        dataNascimentoVendedores DATE,  -- Alterado para DATE
+        dataContratacao DATE,            -- Alterado para DATE
+        dataDesligamento DATE,           -- Alterado para DATE
         FOREIGN KEY (IDCargo) REFERENCES Cargos(IDCargo) ON DELETE SET NULL
         )'''
         table = self.createTable(self.names.funcionarios, columns_types)
 
         return table
-    
+
     def fornecedores(self) -> str:
         """Create the table 'Fornecedores'"""
         columns_types = '''(
@@ -75,10 +75,10 @@ class Tables:
         bairroFornecedor TEXT,
         cidadeFornecedor TEXT
         )'''
-        table = self.createTable(self.names.fornecedores, columns_types)         
-        
+        table = self.createTable(self.names.fornecedores, columns_types)
+
         return table
-    
+
     def categorias(self) -> str:
         """Create the table 'Categorias'"""
         columns_types = '''(
@@ -91,7 +91,7 @@ class Tables:
         table = self.createTable(self.names.categorias, columns_types)
 
         return table
-    
+
     def produtos(self) -> str:
         """Create the table 'Produtos'"""
         columns_types = '''(
@@ -122,14 +122,15 @@ class Tables:
         table = self.createTable(self.names.clientes, columns_types)
 
         return table
-    
+
     def pedidos(self) -> str:
         """Create the table 'Pedidos'"""
         columns_types = '''(
         IDPedido INTEGER PRIMARY KEY AUTO_INCREMENT,
         IDCliente INTEGER,
         IDFuncionario INTEGER,
-        data TEXT,
+        data DATE,               -- Alterado para DATE
+        hora TIME,               -- Alterado para TIME
         frete REAL,
         FOREIGN KEY (IDCliente) REFERENCES Clientes(IDCliente) ON DELETE CASCADE,
         FOREIGN KEY (IDFuncionario) REFERENCES Funcionarios(IDFuncionario) ON DELETE SET NULL
@@ -137,7 +138,7 @@ class Tables:
         table = self.createTable(self.names.pedidos, columns_types)
 
         return table
-    
+
     def itensPedido(self) -> str:
         """Create the table 'ItensPedido'"""
         columns_types = '''(
@@ -150,3 +151,4 @@ class Tables:
         table = self.createTable(self.names.itensPedido, columns_types)
 
         return table
+
