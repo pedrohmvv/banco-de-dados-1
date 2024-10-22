@@ -74,14 +74,14 @@ class Controller:
 
         logging.info("Positions inserted successfully.")
 
-    def insertFuncionarios(self, db: DB, qtd_vendedores: int = 50)-> None:
+    def insertFuncionarios(self, db: DB, qtd_funcionarios: int = 70)-> None:
         """Insert Vendedores data into the database"""
-        logging.info(f"Inserting {qtd_vendedores} sellers...")
+        logging.info(f"Inserting {qtd_funcionarios} sellers...")
 
         table_name = db.tables.names.funcionarios
         funcionarios_columns = db.getColumns(table=table_name, insert=True)
 
-        for _ in range(qtd_vendedores):
+        for _ in range(qtd_funcionarios):
             cargo_id = random.randint(1, len(self.items.cargos))
             name = self.faker.name()
             
@@ -101,7 +101,7 @@ class Controller:
             )
             self.funcionarios_ids.append(db.cursor.lastrowid)
 
-        logging.info(f"{qtd_vendedores} sellers inserted successfully.")
+        logging.info(f"{qtd_funcionarios} sellers inserted successfully.")
 
     def insertFornecedores(self, db: DB, qtd_fornecedores: int = 17) -> None:
         """Insert Fornecedores data into the database"""
