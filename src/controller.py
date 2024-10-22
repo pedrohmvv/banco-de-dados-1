@@ -211,13 +211,14 @@ class Controller:
             id_vendedor, hire_date, firing_date = random.choice(id_vendedores)
 
             client_id = random.choice(self.clientes_ids)
-            order_date = self.faker.date_this_year()
             freight = round(random.uniform(10, 100), ndigits=2)
 
             if isinstance(hire_date, str):
                 hire_date = datetime.strptime(hire_date, '%Y-%m-%d').date()
             if firing_date is not None and isinstance(firing_date, str):
                 firing_date = datetime.strptime(firing_date, '%Y-%m-%d').date()
+
+            order_date = self.faker.date_between_dates(date_start=hire_date, date_end=date.today())
 
             # Check if the salesperson was employed on the order date
             if (hire_date <= order_date) and (firing_date is None or order_date <= firing_date):

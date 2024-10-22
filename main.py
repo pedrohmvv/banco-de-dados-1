@@ -15,7 +15,10 @@ if __name__ == "__main__":
             
             # Garantee that the database connection is active
             if database.connection:
-                controller.createTables(db=database)
+                try:
+                    controller.createTables(db=database)
+                except Exception as e:
+                    raise e
                 controller.insertCargos(db=database)
                 controller.insertFuncionarios(db=database)
                 controller.insertClientes(db=database)
