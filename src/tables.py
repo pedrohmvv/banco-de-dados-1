@@ -53,7 +53,7 @@ class Tables:
     def funcionarios(self) -> str:
         """Create the table 'Vendedores'"""
         columns_types = '''(
-        IDVendedor INTEGER PRIMARY KEY AUTO_INCREMENT,
+        IDFuncionario INTEGER PRIMARY KEY AUTO_INCREMENT,
         IDCargo INTEGER,
         nomeVendedor TEXT,
         dataNascimentoVendedores TEXT,
@@ -128,11 +128,11 @@ class Tables:
         columns_types = '''(
         IDPedido INTEGER PRIMARY KEY AUTO_INCREMENT,
         IDCliente INTEGER,
-        IDVendedor INTEGER,
+        IDFuncionario INTEGER,
         data TEXT,
         frete REAL,
         FOREIGN KEY (IDCliente) REFERENCES Clientes(IDCliente) ON DELETE CASCADE,
-        FOREIGN KEY (IDVendedor) REFERENCES Vendedores(IDVendedor) ON DELETE SET NULL
+        FOREIGN KEY (IDFuncionario) REFERENCES Funcionarios(IDFuncionario) ON DELETE SET NULL
         )'''
         table = self.createTable(self.names.pedidos, columns_types)
 

@@ -180,10 +180,10 @@ class DB:
         """Create all tables"""
         self.createCargos()
         self.createFuncionarios()
-        self.createClientes()
         self.createFornecedores()
         self.createCategorias()
         self.createProdutos()
+        self.createClientes()
         self.createPedidos()
         self.createItemPedidos()
 

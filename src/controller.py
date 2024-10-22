@@ -199,7 +199,7 @@ class Controller:
         logging.info(f"Inserting {qtd_pedidos} orders...")
 
         # IDvendedor must be a id from the vendedores table where IDCargo = 2 (Salesperson)
-        query = "SELECT IDVendedor, dataContratacao, dataDesligamento FROM Funcionarios WHERE IDCargo = 2"
+        query = "SELECT IDFuncionario, dataContratacao, dataDesligamento FROM Funcionarios WHERE IDCargo = 2"
         db.cursor.execute(query)
         id_vendedores = db.cursor.fetchall()
 
