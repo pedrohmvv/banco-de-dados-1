@@ -24,7 +24,7 @@ class Controller:
         self.produtos_ids = []
         self.clientes_ids = []
         self.pedidos_ids = []
-        self.vendedores_ids = []
+        self.funcionarios_ids = []
 
     def createDatabase(self, db: DB) -> bool:
         """Create the database passed"""
@@ -74,12 +74,12 @@ class Controller:
 
         logging.info("Positions inserted successfully.")
 
-    def insertVendedores(self, db: DB, qtd_vendedores: int = 10) -> None:
+    def insertFuncionarios(self, db: DB, qtd_vendedores: int = 10) -> None:
         """Insert Vendedores data into the database"""
         logging.info(f"Inserting {qtd_vendedores} sellers...")
 
-        table_name = db.tables.names.vendedores
-        vendedores_columns = db.getColumns(table=table_name, insert=True)
+        table_name = db.tables.names.funcionarios
+        funcionarios_columns = db.getColumns(table=table_name, insert=True)
 
         for _ in range(qtd_vendedores):
             cargo_id = random.randint(1, len(self.items.cargos))
@@ -96,10 +96,10 @@ class Controller:
 
             db.insertData(
                 table=table_name,
-                columns=vendedores_columns,
+                columns=funcionarios_columns,
                 values=(cargo_id, name, birth_date, hire_date, firing_date)
             )
-            self.vendedores_ids.append(db.cursor.lastrowid)
+            self.funcionarios_ids.append(db.cursor.lastrowid)
 
         logging.info(f"{qtd_vendedores} sellers inserted successfully.")
 
@@ -199,7 +199,7 @@ class Controller:
         logging.info(f"Inserting {qtd_pedidos} orders...")
 
         # IDvendedor must be a id from the vendedores table where IDCargo = 2 (Salesperson)
-        query = "SELECT IDVendedor, dataContratacao, dataDesligamento FROM Vendedores WHERE IDCargo = 2"
+        query = "SELECT IDVendedor, dataContratacao, dataDesligamento FROM Funcionarios WHERE IDCargo = 2"
         db.cursor.execute(query)
         id_vendedores = db.cursor.fetchall()
 

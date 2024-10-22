@@ -92,17 +92,17 @@ class DB:
             except Error as e:
                 logging.error(f"Error while creating table '{self.tables.names.cargos}': {e}")
 
-    def createVendedores(self) -> None:
+    def createFuncionarios(self) -> None:
         """Create the table 'Vendedores'"""
         if self.connection:
             try:
-                vendedores = self.createQuery(self.tables.vendedores())
+                vendedores = self.createQuery(self.tables.funcionarios())
                 self.cursor.execute(vendedores)
                 self.connection.commit()
-                logging.info(f"Table '{self.tables.names.vendedores}' created successfully.")
+                logging.info(f"Table '{self.tables.names.funcionarios}' created successfully.")
 
             except Error as e:
-                logging.error(f"Error while creating table '{self.tables.names.vendedores}': {e}")
+                logging.error(f"Error while creating table '{self.tables.names.funcionarios}': {e}")
 
     def createFornecedores(self) -> None:
         """Create the table 'Fornecedores'"""
@@ -179,11 +179,11 @@ class DB:
     def createTables(self) -> None:
         """Create all tables"""
         self.createCargos()
-        self.createVendedores()
+        self.createFuncionarios()
+        self.createClientes()
         self.createFornecedores()
         self.createCategorias()
         self.createProdutos()
-        self.createClientes()
         self.createPedidos()
         self.createItemPedidos()
 

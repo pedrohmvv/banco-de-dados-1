@@ -17,11 +17,11 @@ if __name__ == "__main__":
             if database.connection:
                 controller.createTables(db=database)
                 controller.insertCargos(db=database)
-                controller.insertVendedores(db=database)
+                controller.insertFuncionarios(db=database)
+                controller.insertClientes(db=database)
                 controller.insertFornecedores(db=database)
                 controller.insertCategorias(db=database)
                 controller.insertProdutos(db=database)
-                controller.insertClientes(db=database)
                 controller.insertPedidos(db=database)
             else:
                 print("Failed to connect to the specific database after creation.")

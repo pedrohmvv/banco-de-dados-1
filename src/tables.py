@@ -12,7 +12,7 @@ class TablesNames:
     clientes: str
     pedidos: str
     itensPedido: str
-    vendedores: str
+    funcionarios: str
     cargos: str
 
 class Tables:
@@ -29,7 +29,7 @@ class Tables:
             clientes=names_data.get('clientes'),
             pedidos=names_data.get('pedidos'),
             itensPedido=names_data.get('itensPedido'),
-            vendedores=names_data.get('vendedores'),
+            funcionarios=names_data.get('funcionarios'),
             cargos=names_data.get('cargos')
         )
         
@@ -50,7 +50,7 @@ class Tables:
 
         return table
     
-    def vendedores(self) -> str:
+    def funcionarios(self) -> str:
         """Create the table 'Vendedores'"""
         columns_types = '''(
         IDVendedor INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -61,7 +61,7 @@ class Tables:
         dataDesligamento TEXT,
         FOREIGN KEY (IDCargo) REFERENCES Cargos(IDCargo) ON DELETE SET NULL
         )'''
-        table = self.createTable(self.names.vendedores, columns_types)
+        table = self.createTable(self.names.funcionarios, columns_types)
 
         return table
     
