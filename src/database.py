@@ -38,7 +38,7 @@ class DB:
             logging.error(f"Error while trying to connect to database: {e}")
             return False
 
-    def createDatabase(self, user: User) -> None:
+    def createDatabase(self, user: User) -> bool:
         """Create the database
         
         Args: user (User): User object
@@ -54,9 +54,11 @@ class DB:
             self.cursor.execute(f"CREATE DATABASE IF NOT EXISTS `{self.db}`")
             self.connection.commit()
             logging.info(f"Database '{self.db}' created successfully.")
+            return True
 
         except Error as e:
             logging.error(f"Error while creating database: {e}")
+            return False
         
         finally:
             if self.cursor:
@@ -66,6 +68,7 @@ class DB:
         """Close the database connection"""
         if self.cursor:
             self.cursor.close()
+
         if self.connection:
             self.connection.close()
         logging.info("Database connection closed.")
