@@ -16,6 +16,8 @@ if __name__ == "__main__":
             # Garantee that the database connection is active
             if database.connection:
                 controller.createTables(db=database)
+                controller.insertCargos(db=database)
+                controller.insertVendedores(db=database)
                 controller.insertFornecedores(db=database)
                 controller.insertCategorias(db=database)
                 controller.insertProdutos(db=database)

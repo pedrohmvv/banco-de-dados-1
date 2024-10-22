@@ -41,4 +41,12 @@ class Items:
             "Software": [("Antivirus", 50), ("Operating System", 100), ("Office Suite", 150), ("Video Editor", 200), ("Photo Editor", 100)],
             "Video Games": [("RPG Game", 60), ("Shooter Game", 60), ("Adventure Game", 50), ("Sports Game", 55), ("Racing Game", 50)]
         }
+        self.cargos = {
+            "Manager": 5000,
+            "Salesperson": 2000,
+            "Cashier": 1500,
+            "Stock Clerk": 1200,
+            "Security Guard": 1000,
+            "Intern": 800
+        }
 

@@ -6,6 +6,7 @@ from src.config.items import Items
 import logging
 import random
 from faker import Faker
+from datetime import datetime, date, timedelta
 from mysql.connector import Error
 
 # Logger configuration
@@ -23,6 +24,7 @@ class Controller:
         self.produtos_ids = []
         self.clientes_ids = []
         self.pedidos_ids = []
+        self.vendedores_ids = []
 
     def createDatabase(self, db: DB) -> bool:
         """Create the database passed"""
@@ -54,6 +56,52 @@ class Controller:
         query = "SELECT CPF FROM Clientes WHERE CPF = %s"
         db.cursor.execute(query, (ssn,))
         return db.cursor.fetchone() is not None
+    
+    def insertCargos(self, db: DB) -> None:
+        """Insert Cargos data into the database"""
+        logging.info("Inserting positions...")
+
+        table_name = db.tables.names.cargos
+        cargos_columns = db.getColumns(table=table_name, insert=True)
+
+        for position, salary in self.items.cargos.items():
+            description = f"Position of {position} with a salary of ${salary}."
+            db.insertData(
+                table=table_name,
+                columns=cargos_columns,
+                values=(position, salary, description)
+            )
+
+        logging.info("Positions inserted successfully.")
+
+    def insertVendedores(self, db: DB, qtd_vendedores: int = 10) -> None:
+        """Insert Vendedores data into the database"""
+        logging.info(f"Inserting {qtd_vendedores} sellers...")
+
+        table_name = db.tables.names.vendedores
+        vendedores_columns = db.getColumns(table=table_name, insert=True)
+
+        for _ in range(qtd_vendedores):
+            cargo_id = random.randint(1, len(self.items.cargos))
+            name = self.faker.name()
+            
+            #Hiring date must be at least 18 years after the birth date
+            birth_date = self.faker.date_of_birth(minimum_age=18, maximum_age=65)
+            min_hire_date = birth_date + timedelta(days=18*365)
+            hire_date = self.faker.date_between_dates(date_start=min_hire_date, date_end=date.today())
+
+            firing_date = None
+            if random.choices([True, False], weights=[20, 80], k=1)[0]:  # 20% firing chance
+                firing_date = self.faker.date_between_dates(date_start=hire_date, date_end=date.today())
+
+            db.insertData(
+                table=table_name,
+                columns=vendedores_columns,
+                values=(cargo_id, name, birth_date, hire_date, firing_date)
+            )
+            self.vendedores_ids.append(db.cursor.lastrowid)
+
+        logging.info(f"{qtd_vendedores} sellers inserted successfully.")
 
     def insertFornecedores(self, db: DB, qtd_fornecedores: int = 17) -> None:
         """Insert Fornecedores data into the database"""
@@ -150,39 +198,56 @@ class Controller:
         """Insert Pedidos data into the database"""
         logging.info(f"Inserting {qtd_pedidos} orders...")
 
+        # IDvendedor must be a id from the vendedores table where IDCargo = 2 (Salesperson)
+        query = "SELECT IDVendedor, dataContratacao, dataDesligamento FROM Vendedores WHERE IDCargo = 2"
+        db.cursor.execute(query)
+        id_vendedores = db.cursor.fetchall()
+
         for _ in range(qtd_pedidos):
             table_name = db.tables.names.pedidos
             pedidos_columns = db.getColumns(table=table_name, insert=True)
+
+            # Choose a random salesperson and check if they were employed on the order date
+            id_vendedor, hire_date, firing_date = random.choice(id_vendedores)
 
             client_id = random.choice(self.clientes_ids)
             order_date = self.faker.date_this_year()
             freight = round(random.uniform(10, 100), ndigits=2)
 
-            try:
-                db.insertData(
-                    table=table_name,
-                    columns=pedidos_columns,
-                    values=(client_id, order_date, freight)
-                )
-                order_id = db.cursor.lastrowid
-                self.pedidos_ids.append(order_id)
+            if isinstance(hire_date, str):
+                hire_date = datetime.strptime(hire_date, '%Y-%m-%d').date()
+            if firing_date is not None and isinstance(firing_date, str):
+                firing_date = datetime.strptime(firing_date, '%Y-%m-%d').date()
 
-                table_name = db.tables.names.itensPedido
-                itensPedido_columns = db.getColumns(table=table_name, insert=True)
-
-                items_quantities = random.randint(1, 5)
-                for _ in range(items_quantities):
-                    product_id = random.choice(self.produtos_ids)
-                    quantity = random.randint(1, 10)
-
+            # Check if the salesperson was employed on the order date
+            if (hire_date <= order_date) and (firing_date is None or order_date <= firing_date):
+                try:
                     db.insertData(
                         table=table_name,
-                        columns=itensPedido_columns,
-                        values=(order_id, product_id, quantity)
+                        columns=pedidos_columns,
+                        values=(client_id, id_vendedor, order_date, freight)
                     )
+                    order_id = db.cursor.lastrowid
+                    self.pedidos_ids.append(order_id)
 
-                logging.info(f"Order {order_id} inserted successfully.")
+                    table_name = db.tables.names.itensPedido
+                    itensPedido_columns = db.getColumns(table=table_name, insert=True)
 
-            except Error as e:
-                logging.error(f"Error while inserting order: {e}")
-                db.connection.rollback()
+                    items_quantities = random.randint(1, 5)
+                    for _ in range(items_quantities):
+                        product_id = random.choice(self.produtos_ids)
+                        quantity = random.randint(1, 10)
+
+                        db.insertData(
+                            table=table_name,
+                            columns=itensPedido_columns,
+                            values=(order_id, product_id, quantity)
+                        )
+
+                    logging.info(f"Order {order_id} inserted successfully.")
+
+                except Error as e:
+                    logging.error(f"Error while inserting order: {e}")
+                    db.connection.rollback()
+            else:
+                logging.info(f"Order not inserted for vendor {id_vendedor} because they were not employed on {order_date}.")

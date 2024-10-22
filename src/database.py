@@ -80,6 +80,30 @@ class DB:
         query = ' '.join([create_query, table])
         return query
 
+    def createCargos(self) -> None:
+        """Create the table 'Cargos'"""
+        if self.connection:
+            try:
+                cargos = self.createQuery(self.tables.cargos())
+                self.cursor.execute(cargos)
+                self.connection.commit()
+                logging.info(f"Table '{self.tables.names.cargos}' created successfully.")
+
+            except Error as e:
+                logging.error(f"Error while creating table '{self.tables.names.cargos}': {e}")
+
+    def createVendedores(self) -> None:
+        """Create the table 'Vendedores'"""
+        if self.connection:
+            try:
+                vendedores = self.createQuery(self.tables.vendedores())
+                self.cursor.execute(vendedores)
+                self.connection.commit()
+                logging.info(f"Table '{self.tables.names.vendedores}' created successfully.")
+
+            except Error as e:
+                logging.error(f"Error while creating table '{self.tables.names.vendedores}': {e}")
+
     def createFornecedores(self) -> None:
         """Create the table 'Fornecedores'"""
         if self.connection:
@@ -154,6 +178,8 @@ class DB:
 
     def createTables(self) -> None:
         """Create all tables"""
+        self.createCargos()
+        self.createVendedores()
         self.createFornecedores()
         self.createCategorias()
         self.createProdutos()
