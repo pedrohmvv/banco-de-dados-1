@@ -1,5 +1,4 @@
-mysql
-faker
-random
-yaml
-os
+Faker
+mysql-connector-python
+PyYAML
+python-dotenv
