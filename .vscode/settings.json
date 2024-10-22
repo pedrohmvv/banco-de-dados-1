@@ -1,11 +1,4 @@
 {
-    "todo-tree.general.tags": ["BUG", "HACK", "FIXME", "TODO", "FIXED"],
-    "python.terminal.activateEnvironment": false,
-    "python.languageServer": "Pylance",
-    "python.analysis.diagnosticSeverityOverrides": {
-      "reportMissingImports": "none",
-      "reportMissingModuleSource": "none"
-    },
     "files.exclude": {
       "**/.git": true,
       "**/.svn": true,
@@ -19,23 +12,6 @@
       "**/__pycache__": true,
       "**/.idea": true,
       "**/node_modules": true
-    },
-    "editor.formatOnSave": false,
-    "[python]": {
-      "editor.codeActionsOnSave": {
-        "source.organizeImports": "never"
-      },
-      "editor.defaultFormatter": "ms-python.autopep8"
-    },
-    "python.testing.pytestArgs": ["src"],
-    "python.testing.pytestEnabled": false,
-    "python.testing.unittestArgs": ["-v", "-s", ".", "-p", "*test*.py"],
-    "workbench.editor.scrollToSwitchTabs": true,
-    "terminal.integrated.defaultProfile.windows": "Git Bash", 
-    "terminal.integrated.profiles.windows": {
-      "Git Bash": {
-        "source": "Git Bash",
-        "icon": "terminal-bash"
-      }
-    } 
-  }
+    }
+}
+
