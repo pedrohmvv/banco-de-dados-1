@@ -12,12 +12,14 @@ O objetivo principal do projeto é a construção de um sistema de banco de dado
 
 O sistema permite:
 
-- **Gerenciamento de Fornecedores**: Registro de fornecedores com informações como nome, endereço e cidade.
-- **Gerenciamento de Categorias**: Organização dos produtos em categorias (ex: alimentos, eletrônicos, móveis).
-- **Gerenciamento de Produtos**: Registro de produtos com informações como nome, preço e estoque disponível.
-- **Gerenciamento de Clientes**: Cadastro de clientes com nome, CPF, endereço e informações de contato.
-- **Gerenciamento de Pedidos**: Registro de pedidos realizados pelos clientes, incluindo a data e o valor do frete.
-- **Gerenciamento de Itens de Pedidos**: Registro dos itens comprados em cada pedido, com quantidade e relação ao produto.
+- **Gerenciamento de Cargos**: Registro e manutenção dos cargos dos funcionários, incluindo informações sobre o nome do cargo, salário e descrição.
+- **Gerenciamento de Funcionários**: Cadastro e gerenciamento dos dados dos funcionários, como nome, cargo, data de nascimento, contratação e desligamento.
+- **Gerenciamento de Fornecedores**: Registro de fornecedores com informações detalhadas, incluindo nome, endereço e cidade.
+- **Gerenciamento de Categorias**: Organização dos produtos em categorias específicas (ex: alimentos, eletrônicos, móveis), associadas a fornecedores.
+- **Gerenciamento de Produtos**: Registro e manutenção de produtos com detalhes como nome, preço unitário e quantidade em estoque.
+- **Gerenciamento de Clientes**: Cadastro de clientes com informações completas, como nome, CPF, endereço e contatos (telefone e e-mail).
+- **Gerenciamento de Pedidos**: Registro de pedidos realizados pelos clientes, com detalhes sobre data, hora, funcionário responsável e valor do frete.
+- **Gerenciamento de Itens de Pedidos**: Registro dos itens incluídos em cada pedido, com especificação da quantidade e associação ao produto correspondente.
 
 ## Tecnologias Utilizadas
 
@@ -26,16 +28,17 @@ O sistema permite:
 - **Faker**: Biblioteca Python para geração de dados fictícios (nomes, endereços, produtos, etc.).
 - **MySQL Connector**: Biblioteca Python para conexão e execução de comandos no MySQL.
 
-## Estrutura do Banco de Dados
-
+## Estrutura do Banco de Dados  
 O banco de dados é composto pelas seguintes tabelas:
 
-1. **Fornecedores**: Contém informações dos fornecedores.
-2. **Categorias**: Armazena categorias dos produtos.
-3. **Produtos**: Detalha os produtos oferecidos pelo sistema.
-4. **Clientes**: Armazena as informações dos clientes.
-5. **Pedidos**: Registra os pedidos feitos pelos clientes.
-6. **ItemPedidos**: Armazena os itens que compõem cada pedido.
+- **Cargos**: Armazena as informações sobre os cargos ocupados pelos funcionários, incluindo o nome, salário e descrição do cargo.
+- **Funcionários**: Contém os dados dos funcionários, como o nome, cargo, datas de nascimento, contratação e desligamento.
+- **Fornecedores**: Contém informações dos fornecedores, incluindo endereço e localização.
+- **Categorias**: Armazena as categorias dos produtos, com uma ligação aos fornecedores que as fornecem.
+- **Produtos**: Detalha os produtos oferecidos pelo sistema, com informações sobre categoria, preço unitário e quantidade em estoque.
+- **Clientes**: Armazena as informações dos clientes, como CPF, nome completo, endereço, telefone e e-mail.
+- **Pedidos**: Registra os pedidos feitos pelos clientes, incluindo data, hora e informações do funcionário responsável pelo pedido.
+- **ItensPedido**: Armazena os itens que compõem cada pedido, detalhando a quantidade de produtos em cada pedido e suas referências.
 
 ### Diagrama ER Simplificado
 
@@ -77,4 +80,12 @@ Ao executar o sistema, as tabelas serão criadas e automaticamente preenchidas c
 
 O código está preparado para gerenciar transações e garantir a integridade dos dados em casos de falhas durante o processo de inserção.
 
----
+Aqui está uma nova seção detalhando as futuras implementações:
+
+## Novas Features Planejadas
+
+Com o objetivo de ampliar a funcionalidade e a usabilidade do sistema, estão previstas as seguintes implementações:
+
+- **Painel de Visualização em Streamlit**: A criação de um painel interativo de visualização de dados utilizando a biblioteca Streamlit. Esse painel permitirá que os usuários acompanhem estatísticas e informações importantes em tempo real, como relatórios de vendas, status de estoque, desempenho de funcionários e análise de pedidos. A interface será intuitiva e personalizável, proporcionando uma visão abrangente e detalhada dos dados do sistema.
+
+- **CRUD com Interface de Usuário**: Desenvolvimento de um CRUD (Create, Read, Update, Delete) com uma interface amigável e acessível, facilitando a manipulação dos dados de forma visual. Essa interface permitirá que os usuários realizem operações de cadastro, consulta, atualização e exclusão de registros em tabelas como fornecedores, produtos, clientes e funcionários, sem a necessidade de interagir diretamente com o banco de dados. A proposta é garantir praticidade e eficiência na gestão dos dados, além de melhorar a experiência do usuário.
